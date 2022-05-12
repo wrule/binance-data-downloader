@@ -9,5 +9,10 @@
   },
   "repository": "https://github.com/wrule/binance-data-downloader.git",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "dependencies": {
+    "@types/node": "^17.0.32",
+    "axios": "^0.27.2",
+    "moment": "^2.29.3"
+  }
 }
