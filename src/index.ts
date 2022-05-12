@@ -3,6 +3,7 @@ import path from 'path';
 import { JSDOM } from 'jsdom';
 import fs from 'fs';
 import moment from 'moment';
+import { csv_dump_json } from '@wrule/ohlcv-utils';
 
 export
 function log(name: string, text = '') {
@@ -64,13 +65,19 @@ async function batchDownloadFiles(
   await Promise.all(Array(batch_size).fill(0).map(() => worker()));
 }
 
+function CSVFileToJSONFile(csvFilePath: string) {
+
+}
+
 async function main() {
-  const a = await getAllFileUrl(
-    'https://s3-ap-northeast-1.amazonaws.com/data.binance.vision',
-    'data/futures/um/daily/klines/BTCUSDT/1m/',
-    'https://data.binance.vision/',
-  );
-  await batchDownloadFiles(a, 'download', 50);
+  // const a = await getAllFileUrl(
+  //   'https://s3-ap-northeast-1.amazonaws.com/data.binance.vision',
+  //   'data/futures/um/daily/klines/BTCUSDT/1m/',
+  //   'https://data.binance.vision/',
+  // );
+  // await batchDownloadFiles(a, 'download', 50);
+
+  csv_dump_json('output/result.csv', 60000);
 }
 
 main();
