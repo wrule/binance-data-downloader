@@ -72,12 +72,12 @@ function CSVFileToJSONFile(csvFilePath: string) {
 async function main() {
   // const a = await getAllFileUrl(
   //   'https://s3-ap-northeast-1.amazonaws.com/data.binance.vision',
-  //   'data/futures/um/daily/klines/BTCUSDT/1m/',
+  //   'data/futures/um/daily/klines/BTCUSDT/15m/',
   //   'https://data.binance.vision/',
   // );
   // await batchDownloadFiles(a, 'download', 50);
 
-  csv_dump_json('output/result.csv', 60000);
+  csv_dump_json('output/result.csv', 60000 * 15);
 }
 
 main();
