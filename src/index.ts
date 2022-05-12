@@ -49,13 +49,28 @@ async function downloadFile(
   }
 }
 
+async function batchDownloadFiles(
+  file_urls: string[],
+  dir_path: string,
+  batch_size = 10,
+) {
+  const task_urls = file_urls.slice();
+  async function worker() {
+    if (task_urls.length > 0) {
+      await downloadFile(task_urls.pop() as string, dir_path);
+      await worker();
+    }
+  }
+  await Promise.all(Array(batch_size).fill(0).map(() => worker()));
+}
+
 async function main() {
   const a = await getAllFileUrl(
     'https://s3-ap-northeast-1.amazonaws.com/data.binance.vision',
-    'data/futures/um/daily/klines/BTCUSDT/15m/',
+    'data/futures/um/daily/klines/BTCUSDT/1m/',
     'https://data.binance.vision/',
   );
-  await downloadFile(a[0], 'src');
+  await batchDownloadFiles(a, 'download', 50);
 }
 
 main();
