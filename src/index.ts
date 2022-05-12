@@ -1,16 +1,19 @@
 import axios from 'axios';
+import path from 'path';
 import { JSDOM } from 'jsdom';
 
-console.log('你好，世界');
-
-async function getAllFileUrl(page_url: string, page_path: string) {
+async function getAllFileUrl(
+  api: string,
+  data_path: string,
+  file_base_url: string,
+) {
   const result: string[] = [];
   let next_marker = undefined;
   do {
-    const rsp = await axios.get(page_url, {
+    const rsp = await axios.get(api, {
       params: {
         delimiter: '/',
-        prefix: page_path,
+        prefix: data_path,
         marker: next_marker,
       },
     });
@@ -18,7 +21,7 @@ async function getAllFileUrl(page_url: string, page_path: string) {
       const xmlText = rsp.data as string;
       const document = new JSDOM(xmlText).window.document;
       const keys = Array.from(document.querySelectorAll('ListBucketResult > Contents > Key'));
-      result.push(...keys.map((key) => key.innerHTML.trim()));
+      result.push(...keys.map((key) => path.join(file_base_url, key.innerHTML.trim())));
       next_marker = document.querySelector('ListBucketResult > NextMarker')?.innerHTML;
     }
   } while (next_marker);
@@ -26,8 +29,12 @@ async function getAllFileUrl(page_url: string, page_path: string) {
 }
 
 async function main() {
-  const a = await getAllFileUrl('https://s3-ap-northeast-1.amazonaws.com/data.binance.vision', 'data/futures/um/daily/klines/BTCUSDT/15m/');
-  console.log(a.length);
+  const a = await getAllFileUrl(
+    'https://s3-ap-northeast-1.amazonaws.com/data.binance.vision',
+    'data/futures/um/daily/klines/BTCUSDT/15m/',
+    'https://data.binance.vision',
+  );
+  console.log(a[0]);
 }
 
 main();
