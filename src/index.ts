@@ -7,6 +7,7 @@ async function main() {
     params: {
       delimiter: '/',
       prefix: 'data/futures/um/daily/klines/BTCUSDT/15m/',
+      marker: undefined,
     },
   });
   if (rsp.status === 200) {
